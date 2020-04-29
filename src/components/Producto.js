@@ -1,9 +1,9 @@
 import React from 'react'
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 //?Redux
 import { useDispatch } from 'react-redux';
-import { borrarProductoAction } from '../actions/productoAction';
+import { borrarProductoAction, obtenerProductoEditar } from '../actions/productoAction';
 //?Librarias de tercer
 
 import swal from 'sweetalert2';
@@ -11,7 +11,7 @@ import swal from 'sweetalert2';
 const Producto = ({ producto }) => {
 
     const dispatch = useDispatch();
-
+    const history = useHistory(); //? HABILITAR el hisory para la redireccion
     //?Confirmar si se desea eliminar
     const confirmarEliminarProducto = id => {
         //?Preguntar al usuario
@@ -38,9 +38,12 @@ const Producto = ({ producto }) => {
                 )
             }
         })
+    }
 
-
-
+    const redireccionarEdicion = (producto) => {
+        dispatch(obtenerProductoEditar(producto));
+        //?haciendo la redireccion de con el use history
+        history.push(`/productos/editar/${producto.id}`)
     }
 
     const { nombre, precio, id } = producto;
@@ -51,11 +54,12 @@ const Producto = ({ producto }) => {
                 <span className="font-weigth-bold">${precio}</span>
             </td>
             <td className="acciones">
-                <Link
+                <button
+                    type="button"
                     className="btn btn-primary mr-2"
-                    to={`/productos/editar/${id}`} >
+                    onClick={() => redireccionarEdicion(producto)} >
                     Editar
-                </Link>
+                </button>
                 <button
                     type="button"
                     className="btn btn-danger"
@@ -67,4 +71,4 @@ const Producto = ({ producto }) => {
     )
 }
 
-export default Producto
+export default Producto;

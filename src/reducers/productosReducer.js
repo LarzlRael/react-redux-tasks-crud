@@ -7,7 +7,10 @@ import {
     DERCARGA_PRODUCTOS_ERROR,
     OBTENER_PRODUCTO_ELIMINAR,
     PRODUCTO_ELIMINADO_EXITO,
-    PRODUCTO_ELIMINADO_ERROR
+    PRODUCTO_ELIMINADO_ERROR,
+    OBTENER_PRODUCTO_EDITAR,
+    PRODUCTO_EDITAR_EXITO,
+    PRODUCTO_EDITAR_ERROR
 } from "../types";
 
 
@@ -16,7 +19,9 @@ const initialState = {
     productos: [],
     error: null,
     loading: false,
-    productoELiminar: null
+    productoELiminar: null,
+    productoEditar: null
+
 }
 
 export default function (state = initialState, action) {
@@ -38,6 +43,7 @@ export default function (state = initialState, action) {
         case DERCARGA_PRODUCTOS_ERROR:
         case AGREGAR_PRODUCTO_ERROR:
         case PRODUCTO_ELIMINADO_ERROR:
+        case PRODUCTO_EDITAR_ERROR:
             return {
                 ...state,
                 loading: false,
@@ -56,14 +62,27 @@ export default function (state = initialState, action) {
                 productoELiminar: action.payload
             }
         case PRODUCTO_ELIMINADO_EXITO:
-            console.log('id de producto eliminar ',state.productoEliminar);
+            console.log('id de producto eliminar ', state.productoEliminar);
             return {
                 ...state,
-                productos: state.productos.filter(producto => producto.id !== 
-                state.productoEliminar),
+                productos: state.productos.filter(producto => producto.id !==
+                    state.productoEliminar),
                 productoEliminar: null
             }
-
+        case OBTENER_PRODUCTO_EDITAR:
+            return {
+                ...state,
+                productoEditar: action.payload
+            }
+        case PRODUCTO_EDITAR_EXITO:
+            return {
+                ...state,
+                productoeditar: null,
+                productos: state.productos.map(producto =>
+                    producto.id === action.payload.id ? producto = action.payload :
+                        producto
+                )
+            }
         default:
             return state;
 
